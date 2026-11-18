@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Legendas em lote</title>
+<meta name="description" content="Legenda e headline automáticas para vídeos curtos, direto no navegador.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:ital,wght@1,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<div class="soltar-tela">Solte os vídeos aqui</div>
+<input type="file" id="arquivos" accept="video/*,.mov,.mp4,.mkv,.m4v,.webm" multiple hidden>
+
+<header>
+  <h1>Legendas em lote</h1>
+  <span class="contagem" id="contagem"></span>
+  <span class="espaco"></span>
+  <button id="btnBaixarTodos" hidden>⬇ Baixar todos</button>
+  <button id="btnAjustes">⚙ Ajustes</button>
+</header>
+
+<!-- tela inicial -->
+<main class="inicio" id="inicio">
+  <div class="cartao-soltar" id="soltarInicio">
+    <div class="icone">🎬</div>
+    <h2>Arraste seus vídeos para cá</h2>
+    <p>ou</p>
+    <button class="primario grande" id="btnEscolher">Escolher vídeos</button>
+    <p class="nota">Pode colocar vários de uma vez. Eles não saem do seu computador.</p>
+  </div>
+  <ol class="passos">
+    <li><b>1. Adicione</b><span>Cada vídeo é legendado sozinho e ganha 3 sugestões de headline.</span></li>
+    <li><b>2. Revise</b><span>Corrija palavras, escolha a headline e veja como vai ficar.</span></li>
+    <li><b>3. Baixe</b><span>O vídeo sai pronto, com a headline longe do rosto.</span></li>
+  </ol>
+  <p class="aviso-navegador" id="avisoNavegador" hidden></p>
+</main>
+
+<!-- área de trabalho -->
+<div class="trabalho" id="trabalho" hidden>
+  <aside class="lista">
+    <div id="itens"></div>
+    <button class="adicionar" id="btnMais">+ Adicionar vídeos</button>
+  </aside>
+
+  <section class="palco">
+    <div class="area"><div class="moldura" id="moldura">
+      <video id="video" preload="auto" playsinline></video>
+      <canvas id="tela"></canvas>
+    </div></div>
+    <div class="controles">
+      <button id="btnPlay" title="Espaço">▶</button>
+      <input type="range" id="barra" min="0" max="1" step="0.01" value="0">
+      <span id="tempo">0:00</span>
+    </div>
+    <p class="dica" id="dicaArrastar">Arraste a headline ou a legenda no vídeo para mudar a posição.</p>
+  </section>
+
+  <section class="painel">
+    <div class="rolagem" id="editor"></div>
+    <div class="rodape" id="rodape"></div>
+  </section>
+</div>
+
+<!-- ajustes -->
+<div class="fundo-modal" id="modal" hidden>
+  <div class="modal">
+    <h3>Ajustes</h3>
+
+    <label class="campo">Qualidade da transcrição
+      <select id="cfgModelo">
+        <option value="base">Rápida — baixa ~150 MB na primeira vez</option>
+        <option value="small">Equilibrada — baixa ~400 MB na primeira vez (recomendada)</option>
+        <option value="turbo">Máxima — baixa ~1 GB na primeira vez; precisa de placa de vídeo</option>
+      </select>
+    </label>
+
+    <label class="campo">Tamanho do vídeo exportado
+      <select id="cfgResolucao">
+        <option value="1080">Full HD (1080 × 1920) — ideal para Reels e TikTok</option>
+        <option value="original">Igual ao original — arquivo maior e mais demorado</option>
+      </select>
+    </label>
+
+    <label class="campo">Headline aparece
+      <select id="cfgHeadline">
+        <option value="3">só nos 3 primeiros segundos (padrão)</option>
+        <option value="5">só nos 5 primeiros segundos</option>
+        <option value="0">o vídeo inteiro</option>
+      </select>
+    </label>
+
+    <label class="campo">Correções automáticas <small>uma por linha: <code>errado = certo</code></small>
+      <textarea id="cfgCorrecoes" rows="5" spellcheck="false"></textarea>
+    </label>
+
+    <label class="campo">Nomes próprios <small>grafia fixa, separados por vírgula; a legenda sempre usa esta grafia e nunca divide o nome</small>
+      <textarea id="cfgNomes" rows="3" spellcheck="false"></textarea>
+    </label>
+
+    <div class="campo">Inteligência artificial <small id="iaSituacao"></small>
+      <p class="explica">Opcional. Com a IA ligada, a legenda é revisada sozinha (ortografia, pontuação, números em numerais, valores em R$ e
+        nomes próprios) e as headlines são escritas a partir da fala. Sem ela, só valem as correções automáticas acima. Para ligar, crie uma chave em
+        <b>platform.claude.com</b> (API Keys), adicione créditos em Billing e cole abaixo. A chave fica salva só neste navegador.</p>
+      <div class="linha">
+        <input type="password" id="cfgChave" placeholder="sk-ant-..." autocomplete="off">
+        <button id="btnTestarChave">Salvar chave</button>
+        <button id="btnRemoverChave" hidden>Remover</button>
+      </div>
+      <p class="erro-msg" id="iaErro"></p>
+    </div>
+
+    <div class="botoes"><span class="espaco"></span><button class="primario" id="btnFechar">Pronto</button></div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
